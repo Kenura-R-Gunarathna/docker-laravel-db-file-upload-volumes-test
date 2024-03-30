@@ -9,6 +9,7 @@ services:
             - "81:80"
         volumes:
             - ./src:/var/www/html
+            - laravel-storage:/var/www/html/storage
         depends_on:
             - mariadb
         env_file: .env.production
@@ -33,3 +34,4 @@ services:
 
 volumes:
     db_data:
+    laravel-storage:
