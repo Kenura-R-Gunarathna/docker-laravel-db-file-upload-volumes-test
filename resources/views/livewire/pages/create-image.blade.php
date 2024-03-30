@@ -1,6 +1,7 @@
 <?php
 
 use function Livewire\Volt\{usesFileUploads, layout, title, state, rules};
+use App\Models\Image;
  
 usesFileUploads();
 
@@ -16,9 +17,13 @@ $save = function () {
     
     $validated = $this->validate();
 
-    $this->form->store();
+    $this->image->store(path:'images', name:uuid()->toString());
 
-    $this->image->store('images');
+    $image = new Image;
+    $image->title = $this->title;
+    $image->description = $this->description;
+    $image->image_path = $this->image;
+    $image->store();
 
 };
  
@@ -36,6 +41,7 @@ $save = function () {
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                 placeholder="Awsome foods" 
             />
+            @error('title') <span class="text-red-600">{{ $message }}</span> @enderror
         </div>
         <div class="mb-5">
             <label for="message" class="block mb-2 text-sm font-medium text-gray-900">Image description</label>
@@ -47,6 +53,7 @@ $save = function () {
                 placeholder="Write your image description here..."
             >
             </textarea>
+            @error('description') <span class="text-red-600">{{ $message }}</span> @enderror
         </div>
         <div class="mb-5">
             <div class="flex items-center justify-center w-full">
@@ -66,6 +73,7 @@ $save = function () {
                     />
                 </label>
             </div> 
+            @error('image') <span class="text-red-600">{{ $message }}</span> @enderror
         </div>
         <button 
             type="submit" 

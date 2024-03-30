@@ -24,6 +24,20 @@ class Image extends Model
         'image_path' => 'string',
     ];
 
+    protected function title(): Attribute
+    {
+        return Attribute::make(
+            set: fn(string $value) => ucfirst($value),
+        );
+    }
+
+    protected function description(): Attribute
+    {
+        return Attribute::make(
+            set: fn(string $value) => ucfirst($value),
+        );
+    }
+
     protected function imageURL(): Attribute
     {
         return Attribute::make(
