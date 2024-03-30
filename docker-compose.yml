@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+    php:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "81:80"
+        volumes:
+            - ./src:/var/www/html
+        depends_on:
+            - mariadb
+        env_file: .env.production
+        environment:
+            DB_HOST: ${DB_HOST}
+            DB_DATABASE: ${DB_DATABASE}
+            DB_USERNAME: ${DB_USERNAME}
+            DB_PASSWORD: ${DB_PASSWORD}
+
+    mariadb:
+        image: mariadb:latest
+        env_file: .env.production
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+        ports:
+            - "3307:3306"
+        volumes:
+            - db_data:/var/lib/mysql
+
+volumes:
+    db_data:
