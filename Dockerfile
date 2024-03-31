@@ -30,3 +30,18 @@ COPY . .
 
 # Generate autoload files
 RUN composer dump-autoload --optimize
+
+# Install Node.js and npm
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
+RUN apt-get install -y nodejs
+
+# Install frontend dependencies and build assets
+RUN npm install
+
+# Set permissions for Laravel storage directories
+RUN chown -R www-data:www-data /var/www/storage
+RUN chmod -R 775 /var/www/storage
+
+# Set permissions for Laravel bootstrap directories
+RUN chown -R www-data:www-data /var/www/bootstrap
+RUN chmod -R 775 /var/www/bootstrap
