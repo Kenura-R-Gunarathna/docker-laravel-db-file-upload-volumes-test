@@ -4,6 +4,10 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
+            args:
+                WWWGROUP: "${WWWGROUP:- 1000}"
+                WWWUSER: "${WWWUSER:- 1000}"
+                NODE_VERSION: "20"
         env_file: .env.production
         environment:
             DB_CONNECTION: "${DB_CONNECTION}"
