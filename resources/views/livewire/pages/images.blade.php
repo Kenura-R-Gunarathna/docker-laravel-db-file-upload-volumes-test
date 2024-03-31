@@ -34,6 +34,9 @@ $remove = function(string $id){
                         Description
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Image
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Action
                     </th>
                 </tr>
@@ -46,9 +49,12 @@ $remove = function(string $id){
                             {{ $image->title }}
                         </th>
                         <td class="px-6 py-4">
-                            <div class="w-max-20 line-clamp-3">
+                            <div class="max-w-8 line-clamp-3">
                                 {{ $image->description }}
                             </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <img class="object-cover w-full rounded-lg h-8" src="{{ $image->imageURL }}" alt="{{ $image->title }}">
                         </td>
                         <td class="flex items-center px-6 py-4">
                             <a href="{{ route('edit-image', ['image' => $image->id]) }}" class="cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
