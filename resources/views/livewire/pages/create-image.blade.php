@@ -8,7 +8,7 @@ usesFileUploads();
 
 layout('components.layouts.app');
 
-title('Create Images');
+title('Create image');
 
 state(['title' => '', 'description' => '', 'image', 'status']);
 
@@ -35,7 +35,7 @@ $save = function () {
         $image->save();
 
         $this->status['is_error'] = false;
-        $this->status['message'] = $th->getMessage();
+        $this->status['message'] = "Image saved successfully!";
 
     } catch (\Throwable $th) {
 
@@ -49,7 +49,7 @@ $save = function () {
 
 <div>
     <form wire:submit="save" class="max-w-sm mx-auto my-10">
-        <h2 class="text-2xl text-gray-900 mb-5">Create Images</h2>
+        <h2 class="text-2xl text-gray-900 mb-5">Create image</h2>
         <div class="mb-5">
             <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Image title</label>
             <input 
@@ -103,9 +103,12 @@ $save = function () {
         >
             Submit
         </button>
+        <a type="button" href="{{ route('images') }}" wire:navigate class="cursor-pointer py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
+            Back
+        </a>
 
         @if($status['is_error'])
-            <div class="flex items-center p-4 mt-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+            <div class="flex items-center p-4 mt-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50" role="alert">
                 <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                 </svg>
@@ -116,7 +119,7 @@ $save = function () {
             </div>
         @else
             @if($status['message'])
-                <div class="flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800" role="alert">
+                <div class="flex items-center p-4 mt-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50" role="alert">
                     <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
                     </svg>

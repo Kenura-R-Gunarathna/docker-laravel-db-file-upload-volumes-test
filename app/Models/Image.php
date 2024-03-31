@@ -24,24 +24,18 @@ class Image extends Model
         'image_path' => 'string',
     ];
 
-    protected function title(): Attribute
+    public function setTitleAttribute($value)
     {
-        return Attribute::make(
-            set: fn(string $value) => ucfirst($value),
-        );
+        $this->attributes['title'] = ucfirst($value);
     }
 
-    protected function description(): Attribute
+    public function setDescriptionAttribute($value)
     {
-        return Attribute::make(
-            set: fn(string $value) => ucfirst($value),
-        );
+        $this->attributes['description'] = ucfirst($value);
     }
 
-    protected function imageURL(): Attribute
+    public function getImageUrlAttribute()
     {
-        return Attribute::make(
-            get: fn(string $value) => asset($value),
-        );
+        return asset($this->image_path);
     }
 }

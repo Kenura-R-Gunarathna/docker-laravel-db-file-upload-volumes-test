@@ -2,12 +2,10 @@
 
 use Livewire\Volt\Volt;
 
-Volt::route('/', 'pages.images');
+Volt::route('/', 'pages.images')->name('images');
 
-Volt::route('/create', 'pages.create-image');
+Volt::route('/create', 'pages.create-image')->name('create-image');
 
-Volt::route('/{id}', 'pages.image');
+Volt::route('/{image}', 'pages.image')->name('image');
 
-Volt::route('/{id}/edit', 'pages.edit-image');
-
-Volt::route('/{id}/delete', 'pages.delete-image');
+Volt::route('/{image}/edit', 'pages.edit-image')->name('edit-image');
