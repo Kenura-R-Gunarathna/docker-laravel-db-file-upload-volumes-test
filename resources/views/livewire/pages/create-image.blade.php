@@ -1,6 +1,6 @@
 <?php
 
-use function Livewire\Volt\{usesFileUploads, layout, title, state, rules};
+use function Livewire\Volt\{usesFileUploads, layout, title, state, mount, rules};
 use Illuminate\Support\Str;
 use App\Models\Image;
  
@@ -10,30 +10,46 @@ layout('components.layouts.app');
 
 title('Create Images');
 
-state(['title' => '', 'description' => '', 'image']);
+state(['title' => '', 'description' => '', 'image', 'status']);
 
 rules(['title' => 'required|min:5|max:50', 'description' => 'required|min:5|max:500', 'image' => 'required|image|max:1024']);
+
+mount(function () {
+
+    $this->status = ['is_error' => false, 'message' => ''];
+});
 
 $save = function () {
     
     $validated = $this->validate();
 
-    $imageName = $this->image->storePubliclyAs(path: 'public/images', name: Str::uuid()->toString(). '.' . $this->image->getClientOriginalExtension());
-    $imagePath = str_replace('public/', 'storage/', $imageName);
-    
-    $image = new Image;
-    $image->title = $this->title;
-    $image->description = $this->description;
-    $image->image_path = $imagePath;
-    $image->save();
+    try {
+        
+        $imageName = $this->image->storePubliclyAs(path: 'public/images', name: Str::uuid()->toString(). '.' . $this->image->getClientOriginalExtension());
+        $imagePath = str_replace('public/', 'storage/', $imageName);
+        
+        $image = new Image;
+        $image->title = $this->title;
+        $image->description = $this->description;
+        $image->image_path = $imagePath;
+        $image->save();
+
+        $this->status['is_error'] = false;
+        $this->status['message'] = $th->getMessage();
+
+    } catch (\Throwable $th) {
+
+        $this->status['is_error'] = true;
+        $this->status['message'] = $th->getMessage();
+    }
 
 };
  
 ?>
 
 <div>
-    <form wire:submit="save" class="max-w-sm mx-auto">
-        <h2 class="text-2xl text-gray-900 mt-10 mb-5">Create Images</h2>
+    <form wire:submit="save" class="max-w-sm mx-auto my-10">
+        <h2 class="text-2xl text-gray-900 mb-5">Create Images</h2>
         <div class="mb-5">
             <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Image title</label>
             <input 
@@ -87,6 +103,31 @@ $save = function () {
         >
             Submit
         </button>
+
+        @if($status['is_error'])
+            <div class="flex items-center p-4 mt-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                </svg>
+                <span class="sr-only">Error</span>
+                <div>
+                    {{ $status['message'] }}
+                </div>
+            </div>
+        @else
+            @if($status['message'])
+                <div class="flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800" role="alert">
+                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                    </svg>
+                    <span class="sr-only">Success</span>
+                    <div>
+                        {{ $status['message'] }}
+                    </div>
+                </div>
+            @endif
+        @endif
+
     </form>
 
 </div>
