@@ -1,28 +1,32 @@
 # Use the official PHP image as base
-FROM php:8.1-apache
+FROM php:8.1-fpm
 
-# Install dependencies and PHP extensions
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
     libzip-dev \
+    libonig-dev \
+    libxml2-dev \
     zip \
-    unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd pdo_mysql zip
+    && docker-php-ext-install -j$(nproc) gd pdo_mysql mbstring zip exif pcntl bcmath opcache
 
-# Install Composer
+# Set working directory
+WORKDIR /var/www
+
+# Copy composer.lock and composer.json
+COPY composer.lock composer.json ./
+
+# Install dependencies
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer install --no-scripts --no-autoloader
 
-# Set the working directory in the container
-WORKDIR /var/www/html
+# Copy existing application directory contents
+COPY . .
 
-# Copy the application code to the container
-COPY . /var/www/html
-
-# Expose port 80 (Apache)
-EXPOSE 80
-
-# Start Apache in the foreground
-CMD ["apache2-foreground"]
+# Generate autoload files
+RUN composer dump-autoload --optimize
