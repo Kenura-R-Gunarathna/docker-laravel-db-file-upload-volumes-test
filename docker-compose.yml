@@ -25,8 +25,8 @@ services:
             MYSQL_USER: ${DB_USERNAME}
             MYSQL_PASSWORD: ${DB_PASSWORD}
             MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-    volumes:
-        - mariadb_data:/var/lib/mysql
+        volumes:
+            - mariadb_data:/var/lib/mysql
 
     nginx:
         image: nginx:alpine
